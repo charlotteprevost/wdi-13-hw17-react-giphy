@@ -2,55 +2,61 @@ import React, { Component } from 'react';
 import './App.css';
 import Search from './Search';
 import SearchResults from './SearchResults';
+// const apiKey = '63MMoF5RDHdOpqznMQh6nF1sVdADbX6Q';
 
 class App extends Component {
   constructor(){
     super();
     this.state = {
-      searched: false
-      query: ''
+      searched: false,
+      query: '',
+      results: []
     }
   }
 
   handleSearch = (query, searched) => {
-
       this.setState({
-        searched: true,
+        searched: searched,
         query: query
-      });
-      console.log(`this.state.query: `, this.state.query);
+      })
+
+       this.setStateResults(query);
+       console.log(`handleSearch(): this.state.query`, this.state.query);
+       console.log(`handleSearch(): this.state.searched`, this.state.searched);
   }
 
-  getGifs =  async () => {
+  getGifs = async (query) => {
     try {
-      const gif = await fetch ('https://api.giphy.com/v1/gifs/search?api_key=63MMoF5RDHdOpqznMQh6nF1sVdADbX6Q&q='+ this.state.query +'&limit=25&offset=0&rating=G&lang=en')
-      const gifJson = await gif.json();
-      console.log(`gifJson: `, gifJson);
-      // return gifJson;   
+      const gifs = await fetch('https://api.giphy.com/v1/gifs/search?api_key=63MMoF5RDHdOpqznMQh6nF1sVdADbX6Q&q='+query+'&limit=25&offset=0&rating=G&lang=en');
+      const gifJson = await gifs.json();
+      await console.log(`gifJson: `, gifJson);
+      return gifJson;   
     } catch(err){
       console.error(`Error: `, err);
     }
   }
 
-  componentDidMount(){
-    this.getGifs
-    try {
-      await this.state.query.push(data);
+  setStateResults = async (query) => {
 
-      this.setState({
-        query: this.state.query
-      });
-      
-    } catch(err){
-    console.log(`Error in componentDidMount .catch(err){}\n`, err);
-    }
+    await this.getGifs(query).then(async (results)=>{
+      try {
+        await console.log(`this.state.query from setStateResults(): `, this.state.query);
+        await this.setState({
+          results: results.data
+        });
 
+        await console.log(`this.state.results from setStateResults(): `, this.state.results);
+        
+      } catch(err){
+      console.log(`Error in setStateResults .catch(err){}\n`, err);
+      }
+    })
   }
 
   render() {
     return (
       <div className="App">
-       {this.state.searched ? <SearchResults /> : <Search handleSearch={this.handleSearch}/>}
+       {this.state.searched ? <div><Search handleSearch={this.handleSearch}/><SearchResults searchResults={this.state.results} /></div> : <Search handleSearch={this.handleSearch}/>}
       </div>
     );
   }
