@@ -21,15 +21,12 @@ class App extends Component {
       })
 
        this.setStateResults(query);
-       console.log(`handleSearch(): this.state.query`, this.state.query);
-       console.log(`handleSearch(): this.state.searched`, this.state.searched);
   }
 
   getGifs = async (query) => {
     try {
       const gifs = await fetch('https://api.giphy.com/v1/gifs/search?api_key=63MMoF5RDHdOpqznMQh6nF1sVdADbX6Q&q='+query+'&limit=25&offset=0&rating=G&lang=en');
       const gifJson = await gifs.json();
-      await console.log(`gifJson: `, gifJson);
       return gifJson;   
     } catch(err){
       console.error(`Error: `, err);
@@ -37,18 +34,13 @@ class App extends Component {
   }
 
   setStateResults = async (query) => {
-
     await this.getGifs(query).then(async (results)=>{
       try {
-        await console.log(`this.state.query from setStateResults(): `, this.state.query);
         await this.setState({
           results: results.data
-        });
-
-        await console.log(`this.state.results from setStateResults(): `, this.state.results);
-        
+        });        
       } catch(err){
-      console.log(`Error in setStateResults .catch(err){}\n`, err);
+        console.log(`Error in setStateResults .catch(err){}\n`, err);
       }
     })
   }

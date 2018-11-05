@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Header, Button, Form, Grid, Segment } from 'semantic-ui-react';
 
 
 class Search extends Component {
@@ -20,18 +21,22 @@ class Search extends Component {
 			e.preventDefault();
 			// Here is where we send the search query UP by calling Search.props
 			this.props.handleSearch(this.state.query, true); 
-			console.log(`this.state.query from handleSubmit(): `, this.state.query);
-			console.log(`this.state.query from handleSubmit(): `, typeof this.state.query);
 	}
 
   render(){
-      return(
-      	<form>
-      		<h1>Find a gif!</h1>
-					<input onChange={this.handleInput} type="text" name="query" placeholder="Search..." value={this.state.query} />
-					<button onClick={this.handleSubmit}>Submit</button>
-      	</form>
-      )
+    return(
+      <Grid container columns={1} textAlign='center' verticalAlign='middle' style={{height: '100%'}}>
+        <Grid.Column style={{maxWidth: '600px'}} >
+          <Segment inverted color='black' style={{width: '575px'}}>
+          	<Header as='h1' color='red'>Find a gif!</Header>
+		      	<Form>
+							<Form.Input onChange={this.handleInput} type="text" name="query" placeholder="Search..." value={this.state.query} />
+							<Button onClick={this.handleSubmit}>Submit</Button>
+		      	</Form>
+          </Segment>
+        </Grid.Column>
+      </Grid>
+    )
   }
 }
 

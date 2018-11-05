@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
-
+import { List, Segment, Header } from 'semantic-ui-react';
 
 class SearchResults extends Component {
 
     render(){
-    	console.log(`Searchresults: this.props.searchResults: `, this.props.searchResults);
     	const searchList = this.props.searchResults.map((oneResult, i) => {
-    		console.log(`oneResult: `, oneResult);
     		return(
-    			<li key={oneResult.id}>
-    				{oneResult.title}<br/><br/>
-    				<iframe src={oneResult.embed_url} width={oneResult.images.original_mp4.width} height={oneResult.images.original_mp4.height} frameBorder="2" className="giphy-embed"></iframe>
-    			</li>
+    			<Segment inverted color='black' style={{maxHeight: '600px', paddingBottom: '55px'}} key={oneResult.id}>
+    				<Header as='h5' style={{padding: 0}}>{oneResult.title}</Header><br/><br/>
+    				<iframe src={oneResult.embed_url} width={oneResult.images.original_mp4.width} height={oneResult.images.original_mp4.height} frameBorder="2" className="giphy-embed" title={oneResult.title}></iframe>
+    			</Segment>
     		)
     	})
         return(
-            <ul>{searchList}</ul>
-
+            <List>{searchList}</List>
         )
     }
 }
